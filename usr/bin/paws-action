@@ -1,0 +1,118 @@
+#!/bin/ash
+# Device actions script
+# Provides:
+# - on-demand SSH tunnel
+# - server heartbeat
+# - software update
+# - configuration query/pull
+#
+
+# author: walter.dedonata@unina.it
+# modified for PAWS by arjuna.sathiaseelan@cl.cam.ac.uk
+
+# Import configuration and functions
+. /etc/paws/paws.conf
+. /usr/lib/paws/functions.inc.sh
+
+# Help screen
+[ $1 ] || { echo "$(basename $0) <command> [options]" ; exit ; }
+
+# Perform the requested action
+case $1 in
+fwd)	# on-demand SSH tunnel
+        echo "tunnel"
+	if [ $2 == ${2#*:} ]; then
+		# Default to local port $MGMT_SSHD_PORT
+
+		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2:127.0.0.1:$MGMT_SSHD_PORT $USER@$SERVER > /dev/null 2>&1 & ) 
+
+	else
+		# To custom IP:PORT destination
+
+		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2 $USER@$SERVER >/dev/null 2>&1 & )
+	fi
+;;
+pong)	# Server heartbeat
+	ltime=$(date +%s)
+	stime=$(( $3 + 2 ))
+
+	# Check clock synch
+	[ $stime -gt $((ltime + 1)) ] && resync=true
+	[ $stime -lt $((ltime - 1)) ] && resync=true
+	if [ $resync ]; then
+		ltime=$stime
+		date -s @$ltime
+		hwclock -w
+	fi
+	echo $ltime > /tmp/paws/var/server_last
+
+	# Store public IP
+	echo $2 > /tmp/paws/var/ip
+;;
+update) # Software update
+       if [ "$2" ]; then
+               # Upgrade from URL to ipk package
+               #wget -O /tmp/paws/pkg.ipk "$2"
+               dl_file $2 /tmp/paws/pkg.ipk
+               opkg install /tmp/paws/pkg.ipk | output $1
+               rm /tmp/paws/pkg.ipk
+       else
+               # Upgrade everything from repositories
+               opkg update
+               opkg upgrade paws-{mgmt,active,chrome}
+       fi
+;;
+mgmtconfupdate) # mgmt conf update
+       #wget -O /tmp/paws/local.conf "$MGMT_CONF_URL"
+       dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
+;;
+scriptupdate) # script file update
+       if [ "$2" ]; then
+               # Upgrade script from URL
+               #wget -O /tmp/paws/$DEVICE_ID.sh "$2"
+               dl_file "$2" /tmp/paws/$DEVICE_ID.sh
+       else
+               # Upgrade script from default URL
+               #wget -O /tmp/paws/$DEVICE_ID.sh "$SCRIPT_URL"
+               dl_file "$SCRIPT_URL" /tmp/paws/$DEVICE_ID.sh
+       fi
+	   chmod 544 /tmp/paws/$DEVICE_ID.sh
+;;
+
+config) # configure parameters
+	case $2 in 
+	wifi-enable)
+		echo $2 > /tmp/paws/var/wifi_latest
+		wifi up >/dev/null 2>&1
+	;;
+
+ 	wifi-disable)
+		echo $2 > /tmp/paws/var/wifi_latest
+		wifi down >/dev/null 2>&1
+	;;
+	
+	remove-throttle)
+		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
+		if [ "$count" ]; then
+			tc qdisc del dev wlan0 root
+		fi
+	;;
+	
+	throttle)
+		count=$(lsmod | grep -c sch_htb)
+		if [ $count == 0 ]; then
+			insmod sch_htb
+		fi
+		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
+		if [ "$count" ]; then
+			tc qdisc del dev wlan0 root
+		fi
+		tc qdisc add dev wlan0 root tbf rate handle 1: htb default 12
+		tc class add dev wlan0 parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
+		tc class add dev wlan0 parept 1:1 classid 1:12 htb rate 256kbit ceil 256kbit
+	;;
+
+	esac		
+;;	
+
+esac

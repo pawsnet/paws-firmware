@@ -1,0 +1,30 @@
+#!/bin/ash
+# Starts a recovery shell if unable to probe the server 
+#
+# author: walter.dedonato@unina.it
+# modified: arjuna.sathiaseelan@cl.cam.ac.uk
+
+# Load configuration file
+. /etc/paws/paws.conf
+. /usr/lib/paws/functions.inc.sh
+
+# Local config
+BASE_PORT=5000
+MAX_PORT=50000
+
+[ -e /tmp/paws/var/server_last ] || echo `date +%s` > /tmp/paws/var/server_last
+
+# Start new tunnel if last timestamp is more than 5 minutes old
+if [ $((`date +%s` - `cat /tmp/paws/var/server_last`)) -gt 300 ]; then
+	if [ -e /tmp/paws/var/tunnel ]; then
+		# Check pre-existing recovery tunnel
+		read pid < /tmp/paws/var/tunnel
+		ps $pid >/dev/null || rm /tmp/paws/var/tunnel
+	else
+		# Create new recovery tunnel
+		port=$(random $BASE_PORT $MAX_PORT)
+		( ssh $KEEP_ALIVE -i $SSH_KEY -R $port:127.0.0.1:$MGMT_SSHD_PORT $USER@$SERVER "rshell $DEVICE_ID $port" >/dev/null 2>&1 & )
+		echo $! > /tmp/paws/var/tunnel
+	fi
+fi
+
