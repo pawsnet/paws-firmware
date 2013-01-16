@@ -17,6 +17,16 @@
 # Help screen
 [ $1 ] || { echo "$(basename $0) <command> [options]" ; exit ; }
 
+msg () {
+echo "$DEVICE_ID log done"
+sleep 1
+return 0
+}
+
+
+
+
+ 
 # Perform the requested action
 case $1 in
 fwd)	# on-demand SSH tunnel
@@ -84,11 +94,23 @@ config) # configure parameters
 	wifi-enable)
 		echo $2 > /tmp/paws/var/wifi_latest
 		wifi up >/dev/null 2>&1
+		# Select probe port
+		read port_counter < /tmp/paws/var/port_counter
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply
+
+
+		                 
+		                 
+
 	;;
 
  	wifi-disable)
 		echo $2 > /tmp/paws/var/wifi_latest
 		wifi down >/dev/null 2>&1
+		read port_counter < /tmp/paws/var/port_counter                                                                                                     
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 	
 	remove-throttle)
@@ -96,6 +118,9 @@ config) # configure parameters
 		if [ "$count" ]; then
 			tc qdisc del dev wlan0 root
 		fi
+		read port_counter < /tmp/paws/var/port_counter                                                                                                     
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 	
 	throttle)
@@ -110,7 +135,14 @@ config) # configure parameters
 		tc qdisc add dev wlan0 root tbf rate handle 1: htb default 12
 		tc class add dev wlan0 parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
 		tc class add dev wlan0 parept 1:1 classid 1:12 htb rate 256kbit ceil 256kbit
+		read port_counter < /tmp/paws/var/port_counter                                                                                                     
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
+
+
+
+
 
 	esac		
 ;;	
