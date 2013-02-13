@@ -1,0 +1,2 @@
+# ignore keys stored by dropbear
+etc/dropbear/*
