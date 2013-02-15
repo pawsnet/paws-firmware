@@ -1,3 +1,4 @@
+# --- Original Rules --------------------- 
 
 config 'defaults'
 	option 'syn_flood' '1'
@@ -114,3 +115,47 @@ config 'rule'
 	option 'proto' 'tcp'
 	option 'dest_port' '22'
 
+# --- New PAWS rules ---
+
+# could we refer to the DNS name instead of the IP address, incase we have to move servers
+config 'rule'
+	option 'name' 'allow all traffic to PAWS emnet server'
+        option 'src' 'paws'
+        option 'dest' 'wan'
+        option 'dest_ip' '83.223.208.50'
+        option 'target' 'ACCEPT'
+
+# isn't this rule covered by the rule below it as 83.223.216.X is included in 83.223.X.X
+# also what is the point of these rules, covering all emnet servers ?
+config 'rule'
+        option 'src' 'paws'
+        option 'dest' 'wan'
+        option 'dest_ip' '83.223.216.0/24'
+        option 'target' 'ACCEPT'
+
+config 'rule'
+        option 'src' 'paws'
+        option 'dest' 'wan'
+        option 'dest_ip' '83.223.0.0/16'
+        option 'target' 'ACCEPT'
+
+config 'rule'
+	option 'name' 'allow all DNS requests'
+        option 'src' 'paws'
+        option 'dest_port' '53'
+        option 'proto' 'tcpudp'
+        option 'target' 'ACCEPT'
+
+config 'rule'
+	option 'name' 'allow all DHCP requests'
+        option 'src' 'paws'
+        option 'src_port' '67-68'
+        option 'dest_port' '67-68'
+        option 'proto' 'udp'
+        option 'target' 'ACCEPT'
+
+config 'rule'
+	option 'name' 'default reject all other traffic'
+        option 'src' 'paws'
+        option 'dest' 'wan'
+        option 'target' 'REJECT'
