@@ -25,7 +25,7 @@ THIS PROCESS HAS NOT YET BEEN TESTED !!
 3) Get the PAWS overlay for BISmark and add the files to correct locations in quirm-rc3
 
 	$ git clone https://github.com/pawsnet/paws-firmware.git
-	$ cp paws-firmware/* quirm-rc3/files
+	$ cp -r paws-firmware/* quirm-rc3/files
 	# for each file copy it across to the same location in quirm-rc3/files
 	
 4.a) Get the keys from router and add into quirm-rc3/files/etc/dropbear/authorized_keys
