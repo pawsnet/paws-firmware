@@ -15,7 +15,7 @@ THIS PROCESS HAS NOT YET BEEN TESTED !!
 1) Get the required packages
 
 	$ sudo apt-get update && sudo apt-get upgrade
-	$ sudo apt-get install subversion build-essential m4 sed flex mklibs 
+	$ sudo apt-get install subversion build-essential  
 
 
 2) Get the BISmark overlay for OpenWRT
