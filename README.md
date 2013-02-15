@@ -15,7 +15,7 @@ THIS PROCESS HAS NOT YET BEEN TESTED !!
 1) Get the required packages
 
 	$ sudo apt-get update && sudo apt-get upgrade
-	$ sudo apt-get install subversion build-essential m4 sed flex mklibs
+	$ sudo apt-get install subversion build-essential m4 sed flex mklibs 
 
 
 2) Get the BISmark overlay for OpenWRT
@@ -25,8 +25,10 @@ THIS PROCESS HAS NOT YET BEEN TESTED !!
 3) Get the PAWS overlay for BISmark and add the files to correct locations in quirm-rc3
 
 	$ git clone https://github.com/pawsnet/paws-firmware.git
-	$ cp paw-firmware/* quirm-rc3/files
-	# for each file copy it across to the same location in quirm-rc3
+	$ cp paws-firmware/* quirm-rc3/files
+	# for each file copy it across to the same location in quirm-rc3/files
+	
+4.a) Get the keys from router and add into quirm-rc3/files/etc/dropbear/authorized_keys
 
 4) Build the BISmark & PAWS overlays
 
@@ -37,7 +39,7 @@ THIS PROCESS HAS NOT YET BEEN TESTED !!
 
 	# copy firmware from /data/users/bismark/builds/$RELEASE_NAME/ar71xx to router
 
-6) Generate and place keys
+6) Generate and place keys some more keys ??
 
 Accessing WebUI
 ===============
