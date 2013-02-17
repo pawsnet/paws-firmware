@@ -13,7 +13,7 @@ The routers that we are using for this project are Netgear N600. The firmware fo
 Building PAWS Firmware
 ======================
 
-# By building into the BISmarks Firmware Build Process
+#### By building into the BISmarks Firmware Build Process
 
 The plan for building the PAWS firmware (on Ubuntu) into an image that can flashed onto the Netgeat N600 is as follows
 
