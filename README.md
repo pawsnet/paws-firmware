@@ -13,50 +13,7 @@ The routers that we are using for this project are Netgear N600. The firmware fo
 Building PAWS Firmware
 ======================
 
-#### By building into the BISmarks Firmware Build Process
-
-The plan for building the PAWS firmware (on Ubuntu) into an image that can flashed onto the Netgeat N600 is as follows
-
-!! THIS PROCESS HAS BEEN TESTED AND FAILED !!
-we are unable to build BISmarks firmware, BISmark have been contacted about the issue
-
-1) Get the required packages
-
-	$ sudo apt-get update && sudo apt-get upgrade
-	$ sudo apt-get install subversion build-essential  
-
-
-2) Get the BISmark overlay for OpenWRT
-
-	$ git clone https://github.com/projectbismark/bismark-openwrt-overlay.git quirm-rc3
-
-3) Get the PAWS overlay for BISmark and add the files to correct locations in quirm-rc3
-
-	$ git clone https://github.com/pawsnet/paws-firmware.git
-	$ cp -r paws-firmware/* quirm-rc3/files
-	# for each file copy it across to the same location in quirm-rc3/files
-	
-4.a) Get the keys from router and add into quirm-rc3/files/etc/dropbear/authorized_keys
-
-4) Build the BISmark & PAWS overlays
-
-	$ cd quirm-rc3 
-	$ ./build-bismark.sh
-
-5) Get PAWS firmware and flash it to netgeat N600 router
-
-	# copy firmware from /data/users/bismark/builds/$RELEASE_NAME/ar71xx to router
-
-6) Generate and place keys some more keys ??
-
-
-# Building PAWS as an OpenWRT Package
-
-We are going to try and follow the instructions here http://wiki.openwrt.org/doc/devel/packages and create a make files like https://github.com/projectbismark/bismark-packages/blob/master/utils/bismark-mgmt/Makefile
-
-1) Download the SDK
-2) copy MakeFile to package/paws
-3) copy authorizated_keys from /etc/dropbear on a working router
+see wiki
 
 Accessing WebUI
 ===============
