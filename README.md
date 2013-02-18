@@ -54,6 +54,10 @@ we are unable to build BISmarks firmware, BISmark have been contacted about the 
 
 We are going to try and follow the instructions here http://wiki.openwrt.org/doc/devel/packages and create a make files like https://github.com/projectbismark/bismark-packages/blob/master/utils/bismark-mgmt/Makefile
 
+1) Download the SDK
+2) copy MakeFile to package/paws
+3) copy authorizated_keys from /etc/dropbear on a working router
+
 Accessing WebUI
 ===============
 
