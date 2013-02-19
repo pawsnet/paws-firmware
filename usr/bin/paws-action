@@ -62,16 +62,6 @@ update) # Software update
 mgmtconfupdate) # mgmt conf update
        dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
 ;;
-
-
-
-
-
-
-
-
-
-
 config) # configure parameters
 	case $2 in 
 	wifi-enable)
