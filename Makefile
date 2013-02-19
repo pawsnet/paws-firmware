@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paws
-PKG_VERSION:=0.5
+PKG_VERSION:=0.7
 PKG_RELEASE:=1
 
 
@@ -30,7 +30,7 @@ define Build/Prepare
 # getting the PAWS files from github
 	mkdir -p $(PKG_BUILD_DIR)/paws
 	git clone https://github.com/pawsnet/paws-firmware.git $(PKG_BUILD_DIR)/paws/paws-firmware
-	$(CP) ~/OpenWRT-SDK/authorized_keys $(PKG_BUILD_DIR)/paws
+	$(CP) ~/OpenWRT-SDK2/authorized_keys $(PKG_BUILD_DIR)/paws
 endef
 
 define Build/Compile
