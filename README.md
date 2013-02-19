@@ -13,7 +13,6 @@ The routers that we are using for this project are Netgear N600. The firmware fo
 Building PAWS Firmware
 ======================
 
-<<<<<<< HEAD
 # By building into the BISmarks Firmware Build Process
 
 The plan for building the PAWS firmware (on Ubuntu) into an image that can flashed onto the Netgeat N600 is as follows
@@ -56,7 +55,6 @@ we are unable to build BISmarks firmware, BISmark have been contacted about the 
 We are going to try and follow the instructions here http://wiki.openwrt.org/doc/devel/packages and create a make files like https://github.com/projectbismark/bismark-packages/blob/master/utils/bismark-mgmt/Makefile
 =======
 see wiki
->>>>>>> c961b506ca6565191ddb50274b8ad730074b4ab4
 
 Accessing WebUI
 ===============
