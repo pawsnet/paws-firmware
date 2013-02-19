@@ -68,7 +68,7 @@ get_ip ()
 
 dl_file ()
 {
-	curl -f --output $2 $1
+	curl -f -Lk --output $2 $1
 	if [ $? -gt 0 ]; then
 		echo -n "" > $2
 	fi
