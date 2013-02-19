@@ -1,0 +1,77 @@
+#!/bin/ash
+# Send UDP probes to PAWS server and
+# call action script depending on the answer
+# Provides:
+# - device heartbeat
+# - UDP proxy fallback
+# author: walter.dedonato@unina.it
+# Modified for PAWS by: arjuna.sathiaseelan@cl.cam.ac.uk
+
+# Load configuration file
+. /etc/paws/paws.conf
+. /usr/lib/paws/functions.inc.sh
+
+# Local config
+MAX_SLEEP=30
+
+
+# Probe message generator
+msg () {
+	echo "$DEVICE_ID ping $VERSION"
+	sleep 1
+	return 0
+}
+
+# Create status files
+[ -e /tmp/paws/var/faults ] || echo 0 > /tmp/paws/var/faults
+[ -e /tmp/paws/var/proxy ] || echo 0 > /tmp/paws/var/proxy
+[ -e /tmp/paws/var/port_counter ] || echo 0 > /tmp/paws/var/port_counter
+
+
+# Check faults count
+read faults < /tmp/paws/var/faults
+if [ $faults -ge 20 ]; then
+	read proxy < /tmp/paws/var/proxy
+	echo $(( (proxy + 1) % 2 )) > /tmp/paws/var/proxy
+
+	echo 0 > /tmp/paws/var/faults
+	faults=0
+	echo "faults"
+fi
+
+# Random delay wait
+sleep $(random 0 $MAX_SLEEP)
+
+# Select probe port
+read port_counter < /tmp/paws/var/port_counter
+PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')
+
+
+# Send probe and store reply
+if [ $(cat /tmp/paws/var/proxy) -eq 1 ]; then
+
+	msg | nc -u $NC_OPTS $PROXY $PROXY_PORT > /tmp/paws/var/reply
+else
+
+	msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply
+fi
+
+# Faults control 
+if [ "`cat /tmp/paws/var/reply`" ]; then
+	# Reset faults count
+	echo 0 > /tmp/paws/var/faults
+	#event uplink up
+else
+	# Update faults count
+	echo $((++faults)) > /tmp/paws/var/faults
+
+	# Cycle server port
+	ports=$(echo $PROBE_PORTS | awk '{print NF}')
+	echo $(( (port_counter + 1) % ports )) > /tmp/paws/var/port_counter
+	#event uplink down
+fi
+
+# Parse reply
+read cmd value < /tmp/paws/var/reply
+[ $cmd ] && REMOTE=on paws-action $cmd $value
+

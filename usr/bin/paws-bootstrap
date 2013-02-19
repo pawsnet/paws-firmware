@@ -1,0 +1,64 @@
+#!/bin/ash
+# Device startup script
+#
+# author walter.dedonato@unina.it
+# modified by arjuna.sathiaseelan@cl.cam.ac.uk
+
+# Load configuration
+. /etc/paws/paws.conf
+
+# Create temporary tree
+mkdir -p /tmp/paws/var
+
+if [ ! -e /etc/paws/ID ]; then
+	(echo -n OW; ifconfig $LAN_IF | awk '/HWaddr / { gsub(":","", $5); print $5 }' ) > /etc/paws/ID
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Restart cron
+/etc/init.d/cron stop
+/etc/init.d/cron start

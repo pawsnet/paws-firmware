@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Public Access WiFi Service</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" href="index.css" type="text/css" media="all" />
+</head>
+
+<body>
+<div id="container">
+  <div class="header">
+    <img id="logo" src="paws.jpg" alt="PAWS logo" />
+    <div id="h1_container">
+      <h1>Welcome the Public Access WiFi Service</h1>
+    </div>
+  </div>
+
+  <p>Welcome, and thank you for participating in PAWS.</p>
+  <p> PAWS (Public Access WiFi Service) is a RCUK funded project that seeks to develop technology that will enable free Internet connectivity to access essential services for all. This will provide greater opportunities of access, enabling digital inclusion and, in turn supporting the UK Government’s ‘digital by default’ programme.
+
+This project is funded by the EPSRC and the Horizon Digital Economy Research Institute. The project has several partners: Rural Digital Economy Hub (funded through its partnership fund), SamKnows, Nottingham City Council, Nottingham City Homes, and the Highlands and Islands Enterprise. </p>
+
+  <p>For further information on the paws project visit our website  <a
+  href="http://www.publicaccesswifi.org/">www.publicaccesswifi.org</a>.  
+
+  <div class="main">
+    <div class="main-left">
+      <h2><a href="/cgi-bin/luci">Configure your router</a></h2>
+      <p class="notes">Change your router's settings.</p>
+    </div>
+    <div class="main-right">
+      <form method = "POST" action ="http://networkdashboard.org/device/" target="_blank">
+        <input type="hidden" name="device" value="841B5E771A8B" />
+        <h2><input class="h2" type="submit" value="View collected data" /></h2>
+      </form>
+      <p class="notes">View and analyze data about the performance of your
+      Internet connection on Network Dashboard.</p>
+    </div>
+  </div>
+
+
+</div> <!-- container -->
+
+</body>
+</html>

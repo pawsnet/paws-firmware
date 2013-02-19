@@ -1,0 +1,121 @@
+#!/bin/ash
+# Device actions script
+# Provides:
+# - on-demand SSH tunnel
+# - server heartbeat
+# - software update
+# - configuration query/pull
+#
+# author: walter.dedonata@unina.it
+# modified for PAWS by arjuna.sathiaseelan@cl.cam.ac.uk
+
+# Import configuration and functions
+. /etc/paws/paws.conf
+. /usr/lib/paws/functions.inc.sh
+
+# Help screen
+[ $1 ] || { echo "$(basename $0) <command> [options]" ; exit ; }
+
+msg () {
+echo "$DEVICE_ID log done"
+sleep 1
+return 0
+}
+
+# Perform the requested action
+case $1 in
+fwd)	# on-demand SSH tunnel
+        echo "tunnel"
+	if [ $2 == ${2#*:} ]; then
+		# Default to local port $MGMT_SSHD_PORT
+		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2:127.0.0.1:$MGMT_SSHD_PORT $USER@$SERVER > /dev/null 2>&1 & ) 
+	else
+		# To custom IP:PORT destination
+		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2 $USER@$SERVER >/dev/null 2>&1 & )
+	fi
+;;
+pong)	# Server heartbeat
+	ltime=$(date +%s)
+	stime=$(( $3 + 2 ))
+
+	# Check clock synch
+	[ $stime -gt $((ltime + 1)) ] && resync=true
+	[ $stime -lt $((ltime - 1)) ] && resync=true
+	if [ $resync ]; then
+		ltime=$stime
+		date -s @$ltime
+		hwclock -w
+	fi
+	echo $ltime > /tmp/paws/var/server_last
+
+	# Store public IP
+	echo $2 > /tmp/paws/var/ip
+;;
+update) # Software update
+       if [ "$2" ]; then
+               # Upgrade from URL to ipk package
+               dl_file $2 /tmp/paws/pkg.ipk
+               opkg install /tmp/paws/pkg.ipk | output $1
+               rm /tmp/paws/pkg.ipk
+       fi
+;;
+mgmtconfupdate) # mgmt conf update
+       dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
+;;
+scriptupdate) # script file update
+       if [ "$2" ]; then
+               # Upgrade script from URL
+               dl_file "$2" /tmp/paws/$DEVICE_ID.sh
+       else
+               # Upgrade script from default URL
+               dl_file "$SCRIPT_URL" /tmp/paws/$DEVICE_ID.sh
+       fi
+	   chmod 544 /tmp/paws/$DEVICE_ID.sh
+;;
+config) # configure parameters
+	case $2 in 
+	wifi-enable)
+		echo $2 > /tmp/paws/var/wifi_latest
+		wifi up >/dev/null 2>&1
+		# Select probe port
+		read port_counter < /tmp/paws/var/port_counter
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply
+	;;
+
+ 	wifi-disable)
+		echo $2 > /tmp/paws/var/wifi_latest
+		wifi down >/dev/null 2>&1
+		read port_counter < /tmp/paws/var/port_counter
+                PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                               msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply 
+	;;
+	
+	remove-throttle)
+		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
+		if [ "$count" ]; then
+			tc qdisc del dev wlan0 root
+		fi
+		read port_counter < /tmp/paws/var/port_counter                                                                                         PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')             
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
+	;;
+	
+	throttle)
+		count=$(lsmod | grep -c sch_htb)
+		if [ $count == 0 ]; then
+			insmod sch_htb
+		fi
+		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
+		if [ "$count" ]; then
+			tc qdisc del dev wlan0 root
+		fi
+		tc qdisc add dev wlan0 root tbf rate handle 1: htb default 12
+		tc class add dev wlan0 parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
+		tc class add dev wlan0 parept 1:1 classid 1:12 htb rate 256kbit ceil 256kbit
+		read port_counter < /tmp/paws/var/port_counter                                                                                                    
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
+	;;
+
+	esac		
+;;	
+
+esac
