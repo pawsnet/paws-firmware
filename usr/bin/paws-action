@@ -55,23 +55,23 @@ update) # Software update
        if [ "$2" ]; then
                # Upgrade from URL to ipk package
                dl_file $2 /tmp/paws/pkg.ipk
-               opkg install /tmp/paws/pkg.ipk | output $1
+               opkg install --force-overwrite /tmp/paws/pkg.ipk | output $1
                rm /tmp/paws/pkg.ipk
        fi
 ;;
 mgmtconfupdate) # mgmt conf update
        dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
 ;;
-scriptupdate) # script file update
-       if [ "$2" ]; then
-               # Upgrade script from URL
-               dl_file "$2" /tmp/paws/$DEVICE_ID.sh
-       else
-               # Upgrade script from default URL
-               dl_file "$SCRIPT_URL" /tmp/paws/$DEVICE_ID.sh
-       fi
-	   chmod 544 /tmp/paws/$DEVICE_ID.sh
-;;
+
+
+
+
+
+
+
+
+
+
 config) # configure parameters
 	case $2 in 
 	wifi-enable)
