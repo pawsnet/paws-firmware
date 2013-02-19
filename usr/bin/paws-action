@@ -6,7 +6,6 @@
 # - software update
 # - configuration query/pull
 #
-
 # author: walter.dedonata@unina.it
 # modified for PAWS by arjuna.sathiaseelan@cl.cam.ac.uk
 
@@ -23,22 +22,15 @@ sleep 1
 return 0
 }
 
-
-
-
- 
 # Perform the requested action
 case $1 in
 fwd)	# on-demand SSH tunnel
         echo "tunnel"
 	if [ $2 == ${2#*:} ]; then
 		# Default to local port $MGMT_SSHD_PORT
-
 		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2:127.0.0.1:$MGMT_SSHD_PORT $USER@$SERVER > /dev/null 2>&1 & ) 
-
 	else
 		# To custom IP:PORT destination
-
 		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2 $USER@$SERVER >/dev/null 2>&1 & )
 	fi
 ;;
@@ -62,33 +54,24 @@ pong)	# Server heartbeat
 update) # Software update
        if [ "$2" ]; then
                # Upgrade from URL to ipk package
-               #wget -O /tmp/paws/pkg.ipk "$2"
                dl_file $2 /tmp/paws/pkg.ipk
                opkg install /tmp/paws/pkg.ipk | output $1
                rm /tmp/paws/pkg.ipk
-       else
-               # Upgrade everything from repositories
-               opkg update
-               opkg upgrade paws-{mgmt,active,chrome}
        fi
 ;;
 mgmtconfupdate) # mgmt conf update
-       #wget -O /tmp/paws/local.conf "$MGMT_CONF_URL"
        dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
 ;;
 scriptupdate) # script file update
        if [ "$2" ]; then
                # Upgrade script from URL
-               #wget -O /tmp/paws/$DEVICE_ID.sh "$2"
                dl_file "$2" /tmp/paws/$DEVICE_ID.sh
        else
                # Upgrade script from default URL
-               #wget -O /tmp/paws/$DEVICE_ID.sh "$SCRIPT_URL"
                dl_file "$SCRIPT_URL" /tmp/paws/$DEVICE_ID.sh
        fi
 	   chmod 544 /tmp/paws/$DEVICE_ID.sh
 ;;
-
 config) # configure parameters
 	case $2 in 
 	wifi-enable)
@@ -98,19 +81,13 @@ config) # configure parameters
 		read port_counter < /tmp/paws/var/port_counter
 		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply
-
-
-		                 
-		                 
-
 	;;
 
  	wifi-disable)
 		echo $2 > /tmp/paws/var/wifi_latest
 		wifi down >/dev/null 2>&1
-		read port_counter < /tmp/paws/var/port_counter                                                                                                     
-		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
-		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
+		read port_counter < /tmp/paws/var/port_counter
+                PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                               msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply 
 	;;
 	
 	remove-throttle)
@@ -118,8 +95,7 @@ config) # configure parameters
 		if [ "$count" ]; then
 			tc qdisc del dev wlan0 root
 		fi
-		read port_counter < /tmp/paws/var/port_counter                                                                                                     
-		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
+		read port_counter < /tmp/paws/var/port_counter                                                                                         PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')             
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 	
@@ -135,14 +111,9 @@ config) # configure parameters
 		tc qdisc add dev wlan0 root tbf rate handle 1: htb default 12
 		tc class add dev wlan0 parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
 		tc class add dev wlan0 parept 1:1 classid 1:12 htb rate 256kbit ceil 256kbit
-		read port_counter < /tmp/paws/var/port_counter                                                                                                     
-		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                           
-		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
+		read port_counter < /tmp/paws/var/port_counter                                                                                                    
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')                                                                msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
-
-
-
-
 
 	esac		
 ;;	
