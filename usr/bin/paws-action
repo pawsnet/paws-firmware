@@ -6,7 +6,6 @@
 # - software update
 # - configuration query/pull
 #
-
 # author: walter.dedonata@unina.it
 # modified for PAWS by arjuna.sathiaseelan@cl.cam.ac.uk
 
@@ -23,22 +22,15 @@ sleep 1
 return 0
 }
 
-
-
-
- 
 # Perform the requested action
 case $1 in
 fwd)	# on-demand SSH tunnel
         echo "tunnel"
 	if [ $2 == ${2#*:} ]; then
 		# Default to local port $MGMT_SSHD_PORT
-
 		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2:127.0.0.1:$MGMT_SSHD_PORT $USER@$SERVER > /dev/null 2>&1 & ) 
-
 	else
 		# To custom IP:PORT destination
-
 		( ssh -y $KEEP_ALIVE -N -i $SSH_KEY -R $2 $USER@$SERVER >/dev/null 2>&1 & )
 	fi
 ;;
@@ -62,7 +54,6 @@ pong)	# Server heartbeat
 update) # Software update
        if [ "$2" ]; then
                # Upgrade from URL to ipk package
-               #wget -O /tmp/paws/pkg.ipk "$2"
                dl_file $2 /tmp/paws/pkg.ipk
                opkg install /tmp/paws/pkg.ipk | output $1
                rm /tmp/paws/pkg.ipk
