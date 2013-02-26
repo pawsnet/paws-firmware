@@ -15,8 +15,8 @@ config wifi-iface
 	option network  paws
 	option mode     ap
 	option ssid     PAWS
-	option encryption psk2
-	option key bismark123
+
+
 
 
 config wifi-device  radio1
