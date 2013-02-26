@@ -11,7 +11,7 @@
 mkdir -p /tmp/paws/var
 
 if [ ! -e /etc/paws/ID ]; then
-	(echo -n OW; ifconfig $LAN_IF | awk '/HWaddr / { gsub(":","", $5); print $5 }' ) > /etc/paws/ID
+	(echo -n OW; ifconfig $LAN_IF | grep 'wlan0' | grep 'Ethernet' | awk '/HWaddr / { gsub(":","", $5); print $5 }' ) > /etc/paws/ID
 fi
 
 uci set wireless.@wifi-device[0].macaddr=`ifconfig eth0 | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`

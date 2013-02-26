@@ -57,10 +57,17 @@ update) # Software update
                dl_file $2 /tmp/paws/pkg.ipk
                opkg install --force-overwrite /tmp/paws/pkg.ipk | output $1
                rm /tmp/paws/pkg.ipk
+               #Select probe port                                             
+               read port_counter < /tmp/paws/var/port_counter                  
+               PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter +1))'}')
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply 
        fi
 ;;
 mgmtconfupdate) # mgmt conf update
-       dl_file "$MGMT_CONF_URL" /tmp/paws/local.conf
+       dl_file $2 /tmp/paws/local.conf
+       read port_counter < /tmp/paws/var/port_counter
+       PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter +1))'}')  
+       msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply
 ;;
 config) # configure parameters
 	case $2 in 
