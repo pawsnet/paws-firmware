@@ -35,7 +35,6 @@ config wifi-iface
 	option device   radio1
 	option network  lan
 	option mode     ap
-	option ssid     BISmark5
-	option encryption psk2
-	option key bismark123
+	option ssid     PAWS
+
 
