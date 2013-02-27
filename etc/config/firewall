@@ -1,4 +1,4 @@
-# --- Original Rules --------------------- 
+#--- Original Rules --------------------- 
 
 config 'defaults'
 	option 'syn_flood' '1'
@@ -127,11 +127,11 @@ config 'rule'
 
 # isn't this rule covered by the rule below it as 83.223.216.X is included in 83.223.X.X
 # also what is the point of these rules, covering all emnet servers ?
-config 'rule'
-        option 'src' 'paws'
-        option 'dest' 'wan'
-        option 'dest_ip' '83.223.216.0/24'
-        option 'target' 'ACCEPT'
+#config 'rule'
+#        option 'src' 'paws'
+#        option 'dest' 'wan'
+#        option 'dest_ip' '83.223.216.0/24'
+#        option 'target' 'ACCEPT'
 
 config 'rule'
 	option 'name' 'allow all DNS requests'
