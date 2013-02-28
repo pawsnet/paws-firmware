@@ -141,6 +141,17 @@ config 'rule'
         option 'target' 'ACCEPT'
 
 config 'rule'
+	option 'src' 'paws'
+	option 'dest_port' '1723'
+	option 'proto' 'tcpudp'
+	option 'target' 'ACCEPT'
+	
+config 'rule'
+	option 'src' 'paws'
+	option 'proto' 'gre'
+	option 'target' 'ACCEPT'
+	
+config 'rule'
 	option 'name' 'allow all DHCP requests'
         option 'src' 'paws'
         option 'src_port' '67-68'
