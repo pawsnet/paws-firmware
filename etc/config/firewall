@@ -6,13 +6,15 @@ config 'defaults'
 	option 'output' 'ACCEPT'
 	option 'forward' 'REJECT'
 
+#----To enable LAN input/output: ACCEPT---
+
 config 'zone'
 	option 'name' 'lan'
 	option 'network' 'lan'
-	option 'input' 'ACCEPT'
-	option 'output' 'ACCEPT'
+	option 'input' 'REJECT'
+	option 'output' 'REJECT'
 	option 'forward' 'REJECT'
-
+#----------------------------------------
 config 'zone'
 	option 'name' 'paws'
 	option 'network' 'paws'
@@ -29,9 +31,12 @@ config 'zone'
 	option 'masq' '1'
 	option 'mtu_fix' '1'
 
-config 'forwarding'
-	option 'src' 'lan'
-	option 'dest' 'wan'
+#------Enable LAN by removing comment-------
+#config 'forwarding'
+	#option 'src' 'lan'
+	#option 'dest' 'wan'
+
+#-----------------------------------------
 
 config 'forwarding'
 	option 'src' 'paws'
