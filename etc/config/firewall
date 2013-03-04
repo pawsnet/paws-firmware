@@ -11,8 +11,8 @@ config 'defaults'
 config 'zone'
 	option 'name' 'lan'
 	option 'network' 'lan'
-	option 'input' 'REJECT'
-	option 'output' 'REJECT'
+	option 'input' 'ACCEPT'
+	option 'output' 'ACCEPT'
 	option 'forward' 'REJECT'
 #----------------------------------------
 config 'zone'
@@ -32,9 +32,9 @@ config 'zone'
 	option 'mtu_fix' '1'
 
 #------Enable LAN by removing comment-------
-#config 'forwarding'
-	#option 'src' 'lan'
-	#option 'dest' 'wan'
+config 'forwarding'
+	option 'src' 'lan'
+	option 'dest' 'wan'
 
 #-----------------------------------------
 
@@ -113,12 +113,6 @@ config 'rule'
 	option 'proto' 'tcp'
 	option 'dest_port' '22'
 
-config 'rule'
-	option '_name' 'SSH'
-	option 'src' 'wan'
-	option 'target' 'ACCEPT'
-	option 'proto' 'tcp'
-	option 'dest_port' '22'
 
 # --- New PAWS rules ---
 
@@ -130,14 +124,21 @@ config 'rule'
         option 'dest_ip' '83.223.208.50'
         option 'target' 'ACCEPT'
 
-# isn't this rule covered by the rule below it as 83.223.216.X is included in 83.223.X.X
-# also what is the point of these rules, covering all emnet servers ?
-#config 'rule'
-#        option 'src' 'paws'
-#        option 'dest' 'wan'
-#        option 'dest_ip' '83.223.216.0/24'
-#        option 'target' 'ACCEPT'
+config 'redirect'
+	option 'src' 'paws'
+	option 'src_dport' '80'
+	option 'dest_ip' '192.168.50.1'
 
+config 'rule'	
+	option 'src' 'paws'
+ 	option 'dest_port' '22'
+	option 'target' 'REJECT'
+
+config 'rule'
+	option 'src' 'paws'
+	option 'dest_port' '23'
+	option 'target' 'REJECT'
+	
 config 'rule'
 	option 'name' 'allow all DNS requests'
         option 'src' 'paws'
