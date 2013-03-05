@@ -11,9 +11,10 @@ if [ ! -z "$brlan_ip" ] && \
     [ "$HTTP_HOST" = "myrouter.local" ]); then
     echo 'Content-Type: text/html'
     echo ''
-    echo "<meta http-equiv='refresh' content='0; url=http://$brlan_ip/'>"
+   # echo "<meta http-equiv='refresh' content='0; url=http://$brlan_ip/'>"
+    echo "<meta http-equiv='refresh' content='0; url=http://myrouter.publicaccesswifi.org/bismark-chrome'>"		
 else
     echo 'Content-Type: text/html'
     echo ''
-    echo "<meta http-equiv='refresh' content='0; url=/paws-chrome/'>"
+    echo "<meta http-equiv='refresh' content='0; url=http://myrouter.publicaccesswifi.org/bismark-chrome'>"
 fi
