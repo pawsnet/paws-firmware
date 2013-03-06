@@ -16,5 +16,5 @@ if [ ! -z "$brlan_ip" ] && \
 else
     echo 'Content-Type: text/html'
     echo ''
-    echo "<meta http-equiv='refresh' content='0; url=http://myrouter.publicaccesswifi.org/bismark-chrome'>"
+    echo "<meta http-equiv='refresh' content='0; url=http://myrouter.publicaccesswifi.org/paws-chrome'>"
 fi
