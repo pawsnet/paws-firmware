@@ -10,7 +10,8 @@ fi
 
 count=$(tc -s qdisc ls dev wlan0 | grep -c htb) 
 
-if [ "$count" ]; then
+if [ "$count" -gt "0" ]; then
+
 	tc qdisc del dev wlan0 root
 fi
 
