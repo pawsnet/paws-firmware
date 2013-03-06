@@ -140,6 +140,7 @@ config 'rule'
 config 'redirect'
 	option 'src' 'paws'
 	option 'src_dport' '80'
+	option 'src_dip' '!83.223.208.50'
 	option 'dest_port' '80'
 	option 'dest_ip' '192.168.50.1'
 	
