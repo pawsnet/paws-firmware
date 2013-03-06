@@ -99,19 +99,8 @@ config) # configure parameters
 	;;
 	
 	throttle)
-		count=$(lsmod | grep -c sch_htb)
-		if [ $count == 0 ]; then
-			insmod sch_htb
-		fi
-		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
-		if [ "$count" ]; then
-			tc qdisc del dev wlan0 root
-		fi
-		tc qdisc add dev wlan0 root handle 1: htb default 12
-		tc class add dev wlan0 parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
-		tc class add dev wlan0 parent 1:1 classid 1:12 htb rate 256kbit ceil 256kbit
-		read port_counter < /tmp/paws/var/port_counter                                                                                                    
-		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}') 
+		paws-throttle
+		read port_counter < /tmp/paws/var/port_counter                                                                                                        PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}') 
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 
