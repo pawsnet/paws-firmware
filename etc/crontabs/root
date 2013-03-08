@@ -9,4 +9,4 @@
 0 5,17 * * * /usr/bin/bismark-experiments-manager -d
 0 5,17 * * * /usr/bin/bismark-updater -d
 5 */12 * * * /usr/bin/bismark-action mgmtconfupdate
-@reboot /usr/bin/paws-throttle
+
