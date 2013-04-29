@@ -145,12 +145,12 @@ config 'redirect'
 	option 'dest_ip' '192.168.50.1'
 	
 
-config 'redirect'
-	option 'src' 'paws'
-	option 'src_dport' '443'
-	option 'src_dip' '!83.223.208.50'
-	option 'dest_port' '443'
-	option 'dest_ip' '192.168.50.1'
+#config 'redirect'
+	#option 'src' 'paws'
+	#option 'src_dport' '443'
+	#option 'src_dip' '!83.223.208.50'
+	#option 'dest_port' '443'
+	#option 'dest_ip' '192.168.50.1'
 
 
 config 'rule'
@@ -168,8 +168,31 @@ config 'rule'
 	
 config 'rule'
 	option 'src' 'paws'
-	option 'proto' 'gre'
+	
+	option 'dest_port' '47'
+
 	option 'target' 'ACCEPT'
+
+config 'rule'
+	option 'src' 'paws'
+	option 'dest_port' '500'
+	option 'target' 'ACCEPT'
+	
+config 'rule'
+	option 'src' 'paws'
+	option 'dest_port' '4500'
+	option 'target' 'ACCEPT'
+	
+config 'rule'
+	option 'src' 'paws'
+	option 'dest_port' '1701'
+	option 'target' 'ACCEPT'
+	
+config 'rule' 
+	option 'src' 'paws'
+	option 'dest_port' '50'
+	option 'target' 'ACCEPT'
+	
 	
 config 'rule'
 	option 'name' 'allow all DHCP requests'
