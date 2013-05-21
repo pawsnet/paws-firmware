@@ -142,15 +142,15 @@ config 'redirect'
 	option 'src_dport' '80'
 	option 'src_dip' '!83.223.208.50'
 	option 'dest_port' '80'
-	option 'dest_ip' '192.168.50.1'
+	option 'dest_ip' '83.223.208.50'
 	
 
-#config 'redirect'
-	#option 'src' 'paws'
-	#option 'src_dport' '443'
-	#option 'src_dip' '!83.223.208.50'
-	#option 'dest_port' '443'
-	#option 'dest_ip' '192.168.50.1'
+config 'redirect'
+	option 'src' 'paws'
+	option 'src_dport' '443'
+	option 'src_dip' '!83.223.208.50'
+	option 'dest_port' '443'
+	option 'dest_ip' '83.223.208.50'
 
 
 config 'rule'
