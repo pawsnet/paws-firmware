@@ -1,0 +1,5 @@
+config 'wshaper' 'settings'
+        option 'network' 'paws'
+        option 'downlink' '512' 
+        option 'uplink' '256'
+
