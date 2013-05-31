@@ -92,8 +92,8 @@ config) # configure parameters
 		/etc/init.d/wshaper stop > /dev/null 2>&1
 		uplink=$(cat /etc/config/wshaper | grep uplink | awk '{print $3}')      
 		downlink=$(cat /etc/config/wshaper | grep downlink | awk '{print $3}')  
-		cat /etc/config/wshaper | sed s/$uplink/'10000'/ > file
-		cat file | sed s/$downlink/'20000'/ > /etc/config/wshaper 
+		cat /etc/config/wshaper | sed s/$uplink/\'10000\'/ > file
+		cat file | sed s/$downlink/\'20000\'/ > /etc/config/wshaper 
 		rm file
 		read port_counter < /tmp/paws/var/port_counter                                                                                         
 		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')             
