@@ -89,21 +89,39 @@ config) # configure parameters
 	;;
 	
 	remove-throttle)
-		count=$(tc -s qdisc ls dev wlan0 | grep -c htb)
-		if [ "$count" ]; then
-			tc qdisc del dev wlan0 root
-		fi
+		/etc/init.d/wshaper stop > /dev/null 2>&1
+		uplink=$(cat /etc/config/wshaper | grep uplink | awk '{print $3}')      
+		downlink=$(cat /etc/config/wshaper | grep downlink | awk '{print $3}')  
+		cat /etc/config/wshaper | sed s/$uplink/\'10000\'/ > file
+		cat file | sed s/$downlink/\'20000\'/ > /etc/config/wshaper 
+		rm file
 		read port_counter < /tmp/paws/var/port_counter                                                                                         
 		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')             
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 	
-	throttle)
-		paws-throttle
-		read port_counter < /tmp/paws/var/port_counter                                                                                                        PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}') 
+	throttle-up)
+		/etc/init.d/wshaper stop > /dev/null 2>&1 
+		uplink=$(cat /etc/config/wshaper | grep uplink | awk '{print $3}')
+		cat /etc/config/wshaper | sed s/$uplink/\'$2\'/ > file
+                mv file /etc/config/wshaper
+                /etc/init.d/wshaper start >/dev/null 2>&1
+                read port_counter < /tmp/paws/var/port_counter
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}') 
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
-
+	
+	throttle-down)
+		/etc/init.d/wshaper stop > /dev/null 2>&1
+		downlink=$(cat /etc/config/wshaper | grep downlink | awk '{print $3}')
+		cat /etc/config/wshaper | sed s/$downlink/\'$2\'/ > file
+		mv file /etc/config/wshaper
+		/etc/init.d/wshaper start >/dev/null 2>&1             
+		read port_counter < /tmp/paws/var/port_counter
+		PROBE_PORT=$(echo $PROBE_PORTS | awk '{print $'$((port_counter + 1))'}')
+		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply   
+	;;
+	
 	esac		
 ;;	
 
