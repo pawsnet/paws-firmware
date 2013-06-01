@@ -18,50 +18,6 @@ fi
 uci set wireless.@wifi-device[0].macaddr=`ifconfig eth0 | grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'`
 uci commit 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Restart cron
 /etc/init.d/cron stop
 /etc/init.d/cron start
