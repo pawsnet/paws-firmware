@@ -73,5 +73,20 @@ fi
 
 # Parse reply
 read cmd value < /tmp/paws/var/reply
-[ $cmd ] && REMOTE=on paws-action $cmd $value
+
+v1=$(echo $value | awk 'match($0,"t"){print substr($0,RSTART+0,11)}')
+
+if [[ $v1 == "throttle-up" || $v1 == "throttle-dw" ]]; then
+        v2=$(echo $value | awk 'match($0,"="){print substr($0,RSTART+1,4)}')
+	[ $cmd ] && REMOTE=on paws-action $cmd $v1 $v2
+
+else
+         [ $cmd ] && REMOTE=on paws-action $cmd $value
+fi  
+
+
+
+
+
+
 

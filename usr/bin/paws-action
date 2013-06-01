@@ -103,7 +103,7 @@ config) # configure parameters
 	throttle-up)
 		/etc/init.d/wshaper stop > /dev/null 2>&1 
 		uplink=$(cat /etc/config/wshaper | grep uplink | awk '{print $3}')
-		cat /etc/config/wshaper | sed s/$uplink/\'$2\'/ > file
+		cat /etc/config/wshaper | sed s/$uplink/\'$3\'/ > file
                 mv file /etc/config/wshaper
                 /etc/init.d/wshaper start >/dev/null 2>&1
                 read port_counter < /tmp/paws/var/port_counter
@@ -111,10 +111,10 @@ config) # configure parameters
 		msg | nc -u $NC_OPTS $SERVER $PROBE_PORT > /tmp/paws/var/reply  
 	;;
 	
-	throttle-down)
+	throttle-dw)
 		/etc/init.d/wshaper stop > /dev/null 2>&1
 		downlink=$(cat /etc/config/wshaper | grep downlink | awk '{print $3}')
-		cat /etc/config/wshaper | sed s/$downlink/\'$2\'/ > file
+		cat /etc/config/wshaper | sed s/$downlink/\'$3\'/ > file
 		mv file /etc/config/wshaper
 		/etc/init.d/wshaper start >/dev/null 2>&1             
 		read port_counter < /tmp/paws/var/port_counter
