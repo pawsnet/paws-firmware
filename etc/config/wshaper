@@ -1,5 +1,6 @@
+# In wshaper downlink is uplink and uplink is downlink: View from the router to user
 config 'wshaper' 'settings'
         option 'network' 'paws'
-        option 'downlink' '512' 
-        option 'uplink' '256'
+        option 'downlink' '256' 
+        option 'uplink' '512'
 
