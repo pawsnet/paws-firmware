@@ -32,9 +32,9 @@ config 'zone'
 	option 'mtu_fix' '1'
 
 #------Enable LAN by removing comment-------
-config 'forwarding'
-	option 'src' 'lan'
-	option 'dest' 'wan'
+#config 'forwarding'
+#	option 'src' 'lan'
+#	option 'dest' 'wan'
 
 #-----------------------------------------
 
@@ -127,7 +127,7 @@ config 'rule'
 	option 'name' 'allow all traffic to PAWS emnet server'
         option 'src' 'paws'
         option 'dest' 'wan'
-        option 'dest_ip' '83.223.208.50'
+        option 'dest_ip' '83.223.208.0/24'
         option 'target' 'ACCEPT'
 
 
@@ -160,38 +160,38 @@ config 'rule'
         option 'proto' 'tcpudp'
         option 'target' 'ACCEPT'
 
-config 'rule'
-	option 'src' 'paws'
-	option 'dest_port' '1723'
-	option 'proto' 'tcpudp'
-	option 'target' 'ACCEPT'
+#config 'rule'
+#	option 'src' 'paws'
+#	option 'dest_port' '1723'
+#	option 'proto' 'tcpudp'
+#	option 'target' 'ACCEPT'
 	
-config 'rule'
-	option 'src' 'paws'
-	
-	option 'dest_port' '47'
+#config 'rule'
+#	option 'src' 'paws'
+#	
+#	option 'dest_port' '47'
+#
+#	option 'target' 'ACCEPT'
 
-	option 'target' 'ACCEPT'
-
-config 'rule'
-	option 'src' 'paws'
-	option 'dest_port' '500'
-	option 'target' 'ACCEPT'
+#config 'rule'
+#	option 'src' 'paws'
+#	option 'dest_port' '500'
+#	option 'target' 'ACCEPT'
 	
-config 'rule'
-	option 'src' 'paws'
-	option 'dest_port' '4500'
-	option 'target' 'ACCEPT'
+#config 'rule'
+#	option 'src' 'paws'
+#	option 'dest_port' '4500'
+#	option 'target' 'ACCEPT'
 	
-config 'rule'
-	option 'src' 'paws'
-	option 'dest_port' '1701'
-	option 'target' 'ACCEPT'
+#config 'rule'
+#	option 'src' 'paws'
+#	option 'dest_port' '1701'
+#	option 'target' 'ACCEPT'
 	
-config 'rule' 
-	option 'src' 'paws'
-	option 'dest_port' '50'
-	option 'target' 'ACCEPT'
+#config 'rule' 
+#	option 'src' 'paws'
+#	option 'dest_port' '50'
+#	option 'target' 'ACCEPT'
 	
 	
 config 'rule'
