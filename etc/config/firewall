@@ -32,9 +32,9 @@ config 'zone'
 	option 'mtu_fix' '1'
 
 #------Enable LAN by removing comment-------
-#config 'forwarding'
-#	option 'src' 'lan'
-#	option 'dest' 'wan'
+config 'forwarding'
+	option 'src' 'lan'
+	option 'dest' 'wan'
 
 #-----------------------------------------
 
