@@ -124,10 +124,10 @@ config 'rule'
 
 # could we refer to the DNS name instead of the IP address, incase we have to move servers
 config 'rule'
-	option 'name' 'allow all traffic to PAWS emnet server'
+	option 'name' 'allow all traffic to PAWS memset server'
         option 'src' 'paws'
         option 'dest' 'wan'
-        option 'dest_ip' '83.223.208.0/24'
+        option 'dest_ip' '77.73.5.136/32'
         option 'target' 'ACCEPT'
 
 
@@ -140,17 +140,17 @@ config 'rule'
 config 'redirect'
 	option 'src' 'paws'
 	option 'src_dport' '80'
-	option 'src_dip' '!83.223.208.50'
+	option 'src_dip' '!77.73.5.136'
 	option 'dest_port' '80'
-	option 'dest_ip' '83.223.208.50'
+	option 'dest_ip' '77.73.5.136'
 	
 
 config 'redirect'
 	option 'src' 'paws'
 	option 'src_dport' '443'
-	option 'src_dip' '!83.223.208.50'
+	option 'src_dip' '!77.73.5.136'
 	option 'dest_port' '443'
-	option 'dest_ip' '83.223.208.50'
+	option 'dest_ip' '77.73.5.136'
 
 
 config 'rule'
