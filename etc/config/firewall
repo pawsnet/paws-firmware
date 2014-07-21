@@ -119,6 +119,7 @@ config 'rule'
 	option 'target' 'ACCEPT'
 	option 'proto' 'tcp'
 	option 'dest_port' '22'
+	
 
 # --- New PAWS rules ---
 
@@ -135,21 +136,6 @@ config 'rule'
 	option 'dest_port' '22'
 	option 'target' 'REJECT'
 	 
-#config 'redirect'
-#	option 'src' 'paws'
-#	option 'src_dport' '80'
-#	option 'src_dip' '!77.73.5.136'
-#	option 'dest_port' '80'
-#	option 'dest_ip' '77.73.5.136'
-	
-
-#config 'redirect'
-#	option 'src' 'paws'
-#	option 'src_dport' '443'
-#	option 'src_dip' '!77.73.5.136'
-#	option 'dest_port' '443'
-#	option 'dest_ip' '77.73.5.136'
-
 
 config 'rule'
 	option 'name' 'allow all DNS requests'
@@ -159,6 +145,16 @@ config 'rule'
         option 'target' 'ACCEPT'
         
 # The following rules allow access to the Google domain for Google Play access.
+
+# allow ports for Google Play store download	
+config 'rule'
+	option '_name' 'Google Play ports'
+        option 'src' 'paws'
+        option 'dest' 'wan'
+	option 'proto' 'tcpudp'
+	option 'dest_port' '5228-5230'
+	option 'target' 'ACCEPT'
+
 config 'rule'
 	option 'name' 'allow access to Google domain on Port 80'
         option 'src' 'paws'
@@ -319,6 +315,21 @@ config 'rule'
         option 'dest_ip' '173.194.0.0/16'
 	option 'dest_port' '443'
         option 'target' 'ACCEPT'
+        
+config 'redirect'
+	option 'src' 'paws'
+	option 'src_dport' '80'
+	option 'src_dip' '!77.73.5.136'
+	option 'dest_port' '80'
+	option 'dest_ip' '77.73.5.136'
+	
+
+config 'redirect'
+	option 'src' 'paws'
+	option 'src_dport' '443'
+	option 'src_dip' '!77.73.5.136'
+	option 'dest_port' '443'
+	option 'dest_ip' '77.73.5.136'
 
 #config 'rule'
 #	option 'src' 'paws'
